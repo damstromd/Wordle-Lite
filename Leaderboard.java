@@ -1,15 +1,23 @@
 import java.util.HashMap;
-//initialize hashmap
 public class Leaderboard{
-  private HashMap<String, Integer> players = new HashMap<String,Integer>();
+  private HashMap<String, Integer> players;
 //ask for name which is the key for the hashmap at the end
-  public Leaderboard (){
+  public Leaderboard () {
+  LeaderBoardState state = LeaderBoardState.restore();
+  if (state == null) {
+    players = new HashMap<String,Integer>();
+  }
+  else {
+    players = state.scores;
+  }
   int round = 1;
     while(round == 1){
       GoodGame g = new GoodGame();
       String name = Utils.inputStr ("What's your name? ");
       players.put(name, g.play());
-      
+      state = new LeaderBoardState();
+      state.scores = players;
+      state.save();
       round = Utils.inputNum("Type \"1\" to play again \nType anything else to quit: ");
       
     }
